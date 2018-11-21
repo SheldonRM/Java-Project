@@ -1,6 +1,8 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class Enemy {
+	Scanner enter = new Scanner(System.in);
 	Random ra = new Random();
 	private static String[] enemyList;
 	private static int maxHealthEnemy;
@@ -29,7 +31,6 @@ public class Enemy {
 		return enemyHealth;
 	}
 	
-	
 	public void setEnemy() {
 		enemy = enemyList[ra.nextInt(enemyList.length)];
 	}
@@ -37,7 +38,6 @@ public class Enemy {
 	public String getEnemy() {
 		return enemy;
 	}
-	
 
 	static public int getMaxHealthEnemy() {
 		return maxHealthEnemy;
@@ -55,5 +55,4 @@ public class Enemy {
 	static public void setMaxDamageEnemy(int dmg) {
 		maxDamageEnemy = dmg;
 	}
-	
 }
