@@ -1,6 +1,8 @@
 import java.util.Random;
+import java.util.Scanner;
 
-public class Player extends Enemy{
+public class Player{
+	Scanner enter= new Scanner(System.in);
 	Random ran = new Random();		//make private
 	private int maxPlayerHealth;
 	private int maxDamage;
@@ -14,7 +16,7 @@ public class Player extends Enemy{
 		maxDamage=100;
 		potions=3;
 		potionsHealing= 75;
-		potionsDropRate= 20; //Percentage
+		potionsDropRate= 30; //Percentage
 		runs=3;
 	}
 	
@@ -22,75 +24,90 @@ public class Player extends Enemy{
 	public int getmaxPlayerHealth() {
 		return maxPlayerHealth;
 	}
-	public int getmaxDamage() {
+	public int getMaxDamage() {
 		return maxDamage;
 	}
-	public int getpotions() {
+	public int getPotions() {
 		return potions;
 	}
-	public int gethealthPotionHealing() {
+	public int getHealthPotionHealing() {
 		return potionsHealing;
 	}
-	public int getpotionDropRate() {
+	public int getPotionDropRate() {
 		return potionsDropRate;
 	}
-	public int getruns() {
+	public int getRuns() {
 		return runs;
 	}
 	
 	//SETTERS
-	public void setmaxPlayerHealth(int health) {
+	public void setMaxPlayerHealth(int health) {
 		maxPlayerHealth = health;
 	}
-	public void setmaxDamage(int dmg) {
+	public void setMaxDamage(int dmg) {
 		maxDamage = dmg;
 	}
-	public void setpotions(int pot) {
+	public void setPotions(int pot) {
 		potions = pot;
 	}
 	public void setPotionsHealing(int potheal) {
 		potionsHealing = potheal;
 	}
-	public void setpotionsDropRate(int rate) {
+	public void setPotionsDropRate(int rate) {
 		potionsDropRate = rate;
 	}
-	public void setruns(int r ) {
+	public void setRuns(int r ) {
 		runs = r;
 	}
 	
 	
-	public int attack(String enemy, int health) {
-		System.out.println("You attacked " + enemy + "!");
-		int dmgDealt = ran.nextInt(maxDamage);
-		int dmgTaken = ran.nextInt(getMaxDamageEnemy());
-		System.out.println("The enemy " + enemy + " took " + dmgDealt + " damage!");	//Use String array thunderbolt etc
+	public Enemy attack(Enemy e) {
+		System.out.println("You attacked the " + e.getEnemy() + "!");
+		enter.nextLine();
+		int dmgDealt = ran.nextInt(getMaxDamage());
+		int dmgTaken = ran.nextInt(Enemy.getMaxDamageEnemy());
+		System.out.println("The enemy " + e.getEnemy() + " took " + dmgDealt + " damage!");
+		enter.nextLine();
 		System.out.println("You took " + dmgTaken + " in retaliation!\n");
+		enter.nextLine();
+		setMaxPlayerHealth(maxPlayerHealth-=dmgTaken);
+		e.setEnemyHealth(e.getEnemyHealth()-dmgDealt);
+		if(getmaxPlayerHealth() <= 0) {
+			return e;
+		}
+		if(e.getEnemyHealth() <= 0) {
+			System.out.println("The wild " + e.getEnemy()+ " fainted!");
+			potionsDrop(e);
+		}
 		
-		health-=dmgDealt;
-		maxPlayerHealth-=dmgTaken;
-		return health;
+		return e;
 	}
 	
-	public void potionsDrop(String enemy) {
-		System.out.println("The wild " + enemy + " fainted!");
-		if(ran.nextInt(100)<=getpotionDropRate()) {
+	public void potionsDrop(Enemy e) {
+		if(ran.nextInt(100)<=getPotionDropRate()) {
 			int dropCount = 1+ran.nextInt(2);
-			setpotions(getpotions()+dropCount);
-			System.out.println("The enemy " + getEnemy() + " dropped something");
+			setPotions(getPotions()+dropCount);
+			System.out.println("The enemy " + e.getEnemy() + " dropped something");
+			enter.nextLine();
 			System.out.println("You picked up " + dropCount + " health potion(s)!!");
-			System.out.println("\tPotions remaining - " + getpotions() + "\n");
+			enter.nextLine();
+			System.out.println("\tPotions remaining - " + getPotions() + "\n");
+			enter.nextLine();
 		}
 	}
 	
-	public void drinkPotion(String enemy) {
+	public void drinkPotion(Enemy e) {
 		if(potions>0) {
 			System.out.println("You used a potion and healed for " + potionsHealing);
 			potions--;
+			enter.nextLine();
 			maxPlayerHealth+=potionsHealing;
 			System.out.println("\tPotions remaining - " + potions + "\n");
-			int dmgTaken = ran.nextInt(getMaxDamageEnemy());					//attacked while healing
+			enter.nextLine();
+			int dmgTaken = ran.nextInt(Enemy.getMaxDamageEnemy());					//attacked while healing
 			maxPlayerHealth-=dmgTaken;
-			System.out.println(enemy + " saw an opening and landed a strike for " + dmgTaken + " damage!");
+			System.out.println(e.getEnemy() + " saw an opening and landed a strike for " + dmgTaken + " damage!");
+			enter.nextLine();
 		}
 		else 
 			System.out.println("Oh no...You are out of potions");
