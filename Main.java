@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
-	
+	static Scanner enter= new Scanner(System.in);
 	public static void main(String[] args) {
 		
 		//System Objects
@@ -12,62 +12,65 @@ public class Main {
 		boolean running = true;
 		int stage = 0;
 		
-		System.out.println("Welcome to the world of Pokemon!");
+		System.out.println("WELCOME TO THE DUNGEON SURVIVAL GAME!");
+		enter.nextLine();
 		
-		//GAME:
 		while(running) {
-			if(plr.getmaxPlayerHealth()>0) {
-				System.out.println("-----------------------ROUND " + ++stage + "--------------------------");
+			System.out.println("-----------------------STAGE " + ++stage + "--------------------------");
+			System.out.println("#A " + enm.getEnemy() + " has appeared!#");		//ENEMY SELECTOR
+			enter.nextLine();
+	
+			while(enm.getEnemyHealth() > 0) {		//WHILE ENEMY IS ALIVE
+				System.out.println("\t" + enm.getEnemy() + "'s HP: " + enm.getEnemyHealth());		//Enemy health																		
+				System.out.println("\tYour HP: " + plr.getmaxPlayerHealth());	//Player health
 				
-				//POKEMON SELECTOR
-				System.out.println("#A wild " + enm.getEnemy() + " has appeared!#\n");		
-		
-				RUN:
-				while(enm.getEnemyHealth() > 0) {
-					System.out.println("\t" + enm.getEnemy() + "'s HP: " + enm.getEnemyHealth());		//Enemy health																		
-					System.out.println("\tYour HP: " + plr.getmaxPlayerHealth());						//Player health
-					
-					System.out.println("\n\tWhat will you do?");									    //OPTIONS
-					System.out.println("\t1-Attack\n\t2-Drink a health Potion\n\t3-Run!");
-					String input = sc.nextLine();
+				System.out.println("\n\tWhat will you do?");		  //OPTIONS
+				System.out.println("\t1-Attack\n\t2-Drink a health Potion\n\t3-Run!");
+				System.out.println("-------------------------------------------------------");
+				String input = sc.nextLine();
+			
 				
-					if(input.equals("1")) {					                                            //ATTACK
-						enm.setEnemyHealth(plr.attack(enm.getEnemy(), enm.getEnemyHealth()));
-						//enm.enemyHealth = plr.Attack(enm.getenemy(), enm.enemyHealth);
-						
-						if(enm.getEnemyHealth()<=0) {				                                   //if enemy dies
-							plr.potionsDrop(enm.getEnemy());
-							break;
-						}
-						
+				if(input.equals("1")) {  
+					plr.attack(enm); 		//ATTACK
+					if(enm.getEnemyHealth()<=0) {     		//NEXT ENEMY
+						break;
 					}
-					
-					else if (input.equals("2")) {												       //Drink Potion
-						plr.drinkPotion(enm.getEnemy());
+				}
+
+
+				else if (input.equals("2")) {		 //Drink Potion
+					plr.drinkPotion(enm);
+				}
+	
+				
+				else if(input.equals("3")) {
+					if(plr.getRuns()>0) {
+						System.out.println("You successfully ran away!");
+						enter.nextLine();
+						plr.setRuns(plr.getRuns()-1);
+						stage--;
+						break;
 					}
-					
-					else if(input.equals("3")) {
-						if(plr.getruns()>0) {
-							System.out.println("You successfully ran away!");
-							plr.setruns(plr.getruns()-1);
-							stage--;
-							break;
-						}
-						System.out.println("You are too exhausted to run");
-						continue RUN;
-						
-					}
-					if(plr.getmaxPlayerHealth()<1) 				//if dead	
-						break;	
-				}	
+					System.out.println("You are too exhausted to run");
+					enter.nextLine();
+					continue;	
+				}
+				
+				
+				if(plr.getmaxPlayerHealth()<1) 				//if dead	
+					break;	
+			}	
+			
+			if(plr.getmaxPlayerHealth()<=0){		//GAME OVER
+				System.out.println("\nGAME OVER\nYOU MADE IT TO STAGE " + stage + "\nHowever you are unable to go any further\nYour journey ends here\nTHANK YOU FOR PLAYING");		//final screen
+				running = false;
 			}
-			else {
-				System.out.println("\n\tGAME OVER\n\tYOU MADE IT TO STAGE " + stage + "\n\tHowever you are unable to go any further\n\tYou crawled away to the nearest Pokemon Center\n\tTHANK YOU FOR PLAYING");		//final screen
-				break;
-			}
-		enm.setEnemy();					 //new enemy
-		enm.rngEnemyHealth();			//Random Number Generator Enemy health     
+			
+			enm.setEnemy();					 //new enemy
+			enm.rngEnemyHealth();			//Random Number Generator Enemy health     
 		}
-	sc.close();
+		sc.close();
+		enter.close();
 	}
+	
 }
