@@ -9,7 +9,7 @@ public class Enemy {
 	private String enemy;
 	
 	public Enemy() {
-		enemyList = new String[] {"Charizard", "Gyarados", "Magikarp", "Mewtwo","Machamp","Hawlucha", "Blaziken","Dragonite","Gengar"};
+		enemyList = new String[] {"Skeleton", "Zombie", "Vampire", "Werewolf", "Orc", "Poltergeist", "Demon", "Minotaur", "Goblin"};
 		maxHealthEnemy= 100;
 		maxDamageEnemy= 75;
 		enemy = enemyList[ra.nextInt(enemyList.length)];
