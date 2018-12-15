@@ -55,4 +55,28 @@ public class Enemy {
 	static public void setMaxDamageEnemy(int dmg) {
 		maxDamageEnemy = dmg;
 	}
+	
+	public void bossBattle() {		//NOTE : ADD LOOT DROPS
+		System.out.println("-------------------------------------------------------");
+		enter.nextLine();
+		System.out.println("...");
+		enter.nextLine();
+		System.out.println("......");
+		enter.nextLine();
+		System.out.println("YOU FIND YOURSELF IN A LARGE ROOM");
+		enter.nextLine();
+		System.out.println("RAWRRRRRRRRR");
+		enter.nextLine();
+		System.out.println("ITS THE FINAL BOSS BATTLE!");
+		enter.nextLine();
+		
+		enemyList = new String[] {"FIRE-BREATHING DRAGON", "3 HEADED SERPENT", "MAGICAL WITCH", "DARK MUMMY", "FALLEN KNIGHT", "COLOSSAL TITAN"};
+		maxHealthEnemy= getMaxHealthEnemy() * 5;
+		maxDamageEnemy= getMaxDamageEnemy() + 20;
+		enemy = enemyList[ra.nextInt(enemyList.length)].toUpperCase();
+		enemyHealth = (1 + ra.nextInt(getMaxHealthEnemy()));
+		if(enemyHealth < 200) {
+			enemyHealth += 200;
+		}
+	}
 }
