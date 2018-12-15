@@ -10,14 +10,16 @@ public class Player{
 	private int potionsHealing;
 	private int potionsDropRate; //Percentage
 	private int runs;
+	private int minDamageAllowed;
 	
 	public Player(){
-		maxPlayerHealth=120;
+		maxPlayerHealth=150;
 		maxDamage=100;
 		potions=3;
-		potionsHealing= 75;
+		potionsHealing= 120;
 		potionsDropRate= 30; //Percentage
 		runs=3;
+		minDamageAllowed = 20;
 	}
 	
 	//GETTERS
@@ -66,12 +68,38 @@ public class Player{
 		enter.nextLine();
 		int dmgDealt = ran.nextInt(getMaxDamage());
 		int dmgTaken = ran.nextInt(Enemy.getMaxDamageEnemy());
-		System.out.println("The enemy " + e.getEnemy() + " took " + dmgDealt + " damage!");
-		enter.nextLine();
-		System.out.println("You took " + dmgTaken + " in retaliation!\n");
-		enter.nextLine();
-		setMaxPlayerHealth(maxPlayerHealth-=dmgTaken);
-		e.setEnemyHealth(e.getEnemyHealth()-dmgDealt);
+		
+		if((dmgDealt <minDamageAllowed) && (dmgTaken < minDamageAllowed)) {			//damage too less to count as a hit
+			System.out.println("Both you and the enemy couldn't land an attack");
+			enter.nextLine();
+			return e;
+		}
+		else if(dmgDealt < minDamageAllowed) {			//player missed
+			System.out.println("You missed");
+			enter.nextLine();
+			setMaxPlayerHealth(maxPlayerHealth-=dmgTaken);
+			System.out.println("You took " + dmgTaken + " in retaliation!\n");
+			enter.nextLine();
+			return e;
+		}
+		
+		else if(dmgTaken < minDamageAllowed) {			//enemy missed
+			e.setEnemyHealth(e.getEnemyHealth()-dmgDealt);
+			System.out.println("The enemy " + e.getEnemy() + " took " + dmgDealt + " damage!");
+			enter.nextLine();
+			System.out.println("The enemy attack missed");
+			enter.nextLine();
+		}
+		
+		else {
+			System.out.println("The enemy " + e.getEnemy() + " took " + dmgDealt + " damage!");
+			enter.nextLine();
+			System.out.println("You took " + dmgTaken + " in retaliation!\n");
+			enter.nextLine();
+			setMaxPlayerHealth(maxPlayerHealth-=dmgTaken);
+			e.setEnemyHealth(e.getEnemyHealth()-dmgDealt);
+		}
+		
 		if(getmaxPlayerHealth() <= 0) {
 			return e;
 		}
